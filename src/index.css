@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+
+/* Global Color Variables */
+:root {
+  --color-purple-medium: #6f54bd;
+  /* Soft Purple */
+  --color-blue-dark: #051da1;
+  /* Deep Navy Blue */
+  --color-navy-charcoal: #1d233b;
+  /* Dark Charcoal Blue */
+  --color-purple-dark: #6446a6;
+  /* Dark Purple */
+  --color-white: #ffffff;
+  /* White */
+  --color-black: #000000;
+
+  --color-navy: #1e1e2f;
+  --color-navy-medium: #433D8B;
+  --color-navy-dark: #222838;
+  --color-purple: #664bc9;
+  
+  /*Client color*/
+  --color-purple-black: #01001d;
+  --color-purple: #9100F9;
+  --color-black-wash: #0c0c0c;
+}
+
+@font-face {
+  font-family: 'CelabRegular';
+  src: url('./assets/fonts/Celeb.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'FootbarPro';
+  src: url('./assets/fonts/FoobarPro-Regular.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MyriadPro';
+  src: url('./assets/fonts/MyriadPro-Regular.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+

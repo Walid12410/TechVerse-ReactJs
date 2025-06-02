@@ -1,0 +1,89 @@
+/* 3D Cube Styles */
+.cube-scene {
+  width: 320px; /* Smaller than 400px */
+  height: 320px;
+  perspective: 1000px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+@media (max-width: 640px) {
+  .cube-scene {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+.cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: cube-rotate 10s linear infinite;
+  z-index: 2;
+}
+
+@keyframes cube-rotate {
+  0%   { transform: rotateY(0deg); }
+  25%  { transform: rotateY(90deg); }
+  50%  { transform: rotateY(180deg); }
+  75%  { transform: rotateY(270deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+.cube-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px solid var(--color-purple);
+  background: #111;
+}
+
+.cube-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+}
+
+/* Adjusted depth for smaller cube */
+.cube-face-front  { transform: translateZ(160px); }
+.cube-face-back   { transform: rotateY(180deg) translateZ(160px); }
+.cube-face-right  { transform: rotateY(90deg) translateZ(160px); }
+.cube-face-left   { transform: rotateY(-90deg) translateZ(160px); }
+.cube-face-top    { transform: rotateX(90deg) translateZ(160px); }
+.cube-face-bottom { transform: rotateX(-90deg) translateZ(160px); }
+
+@media (max-width: 640px) {
+  .cube-face-front  { transform: translateZ(120px); }
+  .cube-face-back   { transform: rotateY(180deg) translateZ(120px); }
+  .cube-face-right  { transform: rotateY(90deg) translateZ(120px); }
+  .cube-face-left   { transform: rotateY(-90deg) translateZ(120px); }
+  .cube-face-top    { transform: rotateX(90deg) translateZ(120px); }
+  .cube-face-bottom { transform: rotateX(-90deg) translateZ(120px); }
+}
+
+/* Pulse border effect */
+@keyframes pulse-border {
+  0% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: var(--color-purple);
+  }
+  100% {
+    border-color: transparent;
+  }
+}
+
+.pulse-border {
+  animation: pulse-border 2s infinite;
+}
