@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import request from '../../utils/request';
-import { toast } from 'react-toastify';
 
 export const getContactUs = createAsyncThunk(
     "contactUs/fetchContactUs",
@@ -25,7 +24,6 @@ export const createContactUs = createAsyncThunk(
             });
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error create data");
             return rejectWithValue((error.response?.data?.error || "Error create data"));
         }
     }
@@ -38,24 +36,12 @@ export const deleteContactUs = createAsyncThunk(
             const response = await request.delete(`/modular/contact-us/delete.php?id=${id}`);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error delete data");
             return rejectWithValue((error.response?.data?.error || "Error delete data"));
         }
     }
 );
 
-export const deleteAllContactUs = createAsyncThunk(
-    "contactUs/deleteAllContactUs",
-    async (_, { rejectWithValue }) => {
-        try {
-            const response = await request.delete(`/modular/contact-us/delete-all.php`);
-            return response.data;
-        } catch (error) {
-            toast.error(error.response?.data?.error || "Error delete all data");
-            return rejectWithValue((error.response?.data?.error || "Error delete all data"));
-        }
-    }
-);
+
 const contactUsSlice = createSlice({
     name: "contactUs",
     initialState: {
@@ -71,9 +57,6 @@ const contactUsSlice = createSlice({
         isDeleteContactUs: false,
         loadingDeleteContactUs: false,
         errorDeleteContactUs: null,
-        isDeleteAllContactUs: false,
-        loadingDeleteAllContactUs: false,
-        errorDeleteAllContactUs: null
     },
     reducers: {
         clearCreateContactUs: (state) => {
@@ -86,11 +69,7 @@ const contactUsSlice = createSlice({
             state.loadingDeleteContactUs = false;
             state.isDeleteContactUs = false;
         },
-        clearDeleteAllContactUs: (state) => {
-            state.errorDeleteAllContactUs = null;
-            state.loadingDeleteAllContactUs = false;
-            state.isDeleteAllContactUs = false;
-        }
+
     },
     extraReducers: (builder) => {
         // fetch contact us
@@ -138,26 +117,11 @@ const contactUsSlice = createSlice({
                 state.loadingDeleteContactUs = false;
                 state.errorDeleteContactUs = action.payload || "Failed to delete contact us";
             });
-        // delete all contact us
-        builder
-            .addCase(deleteAllContactUs.pending, (state) => {
-                state.loadingDeleteAllContactUs = true;
-                state.errorDeleteAllContactUs = null;
-            })
-            .addCase(deleteAllContactUs.fulfilled, (state, action) => {
-                state.loadingDeleteAllContactUs = false;
-                state.isDeleteAllContactUs = true;
-            })
-            .addCase(deleteAllContactUs.rejected, (state, action) => {
-                state.loadingDeleteAllContactUs = false;
-                state.errorDeleteAllContactUs = action.payload || "Failed to delete all contact us";
-            });
     }
 });
 
 export const {clearUpdateContactUs, 
     clearCreateContactUs, 
     clearDeleteContactUs,
-    clearDeleteAllContactUs
 } = contactUsSlice.actions;
 export default contactUsSlice.reducer;

@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import request from '../../utils/request';
-import { toast } from 'react-toastify';
 
 export const getProjectView = createAsyncThunk(
     "projectView/fetchProjectView",
@@ -25,7 +24,6 @@ export const createProjectView = createAsyncThunk(
             });
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error create data");
             return rejectWithValue((error.response?.data?.error || "Error create data"));
         }
     }
@@ -42,7 +40,6 @@ export const updateProjectView = createAsyncThunk(
             });
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error create data");
             return rejectWithValue((error.response?.data?.error || "Error create data"));
         }
     }
@@ -59,7 +56,6 @@ export const updateProjectViewImage = createAsyncThunk(
             });
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.message || "Error create data");
             return rejectWithValue((error.response?.data?.message || "Error create data"));
         }
     }
@@ -72,7 +68,6 @@ export const deleteProjectView = createAsyncThunk(
             const response = await request.delete(`/modular/project-view/delete.php?id=${id}`);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error create data");
             return rejectWithValue((error.response?.data?.error || "Error create data"));
         }
     }

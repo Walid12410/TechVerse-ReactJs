@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import request from '../../utils/request';
-import { toast } from 'react-toastify';
 
 export const getPricing = createAsyncThunk(
     "pricing/fetchPricing",
@@ -21,7 +20,6 @@ export const updatePricing = createAsyncThunk(
             const response = await request.put(`/modular/pricing/update.php?id=${id}`, data);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.message || "Error update data");
             return rejectWithValue((error.response?.data?.message || "Error update data"));
         }
     }
@@ -38,7 +36,6 @@ export const createPricing = createAsyncThunk(
             });
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.message || "Error create data");
             return rejectWithValue((error.response?.data?.message || "Error create data"));
         }
     }
@@ -55,7 +52,6 @@ export const createPricingDetails = createAsyncThunk(
             });
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.message || "Error create data");
             return rejectWithValue((error.response?.data?.message || "Error create data"));
         }
     }
@@ -69,7 +65,6 @@ export const deletePricingDetails = createAsyncThunk(
             const response = await request.delete(`/modular/pricing-details/delete.php?id=${id}`);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.message || "Error delete data");
             return rejectWithValue((error.response?.data?.message || "Error delete data"));
         }
     }
@@ -82,7 +77,6 @@ export const deletePrice = createAsyncThunk(
             const response = await request.delete(`/modular/pricing/delete.php?id=${id}`);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.message || "Error delete data");
             return rejectWithValue((error.response?.data?.message || "Error delete data"));
         }
     }

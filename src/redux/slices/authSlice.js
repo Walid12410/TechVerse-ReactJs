@@ -15,9 +15,9 @@ export const checkAuth = createAsyncThunk(
 
 export const logout = createAsyncThunk(
     "auth/logout",
-    async ({ data }, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const response = await request.post(`/auth/logout.php`, data);
+            const response = await request.post(`/auth/logout.php`);
             return response.data;
         } catch (error) {
             return rejectWithValue((error.response?.data?.error || "Error logout"));

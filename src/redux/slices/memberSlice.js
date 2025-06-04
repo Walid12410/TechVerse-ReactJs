@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import request from '../../utils/request';
-import { toast } from 'react-toastify';
 
 export const getMembers = createAsyncThunk(
     "member/getMembers",
@@ -28,7 +27,6 @@ export const createMember = createAsyncThunk(
             );
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error create data");
             return rejectWithValue((error.response?.data?.error || "Error create data"));
         }
     }
@@ -48,7 +46,6 @@ export const updateMember = createAsyncThunk(
             );
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error update data");
             return rejectWithValue((error.response?.data?.error || "Error update data"));
         }
     }
@@ -62,7 +59,6 @@ export const deleteMember = createAsyncThunk(
             const response = await request.post(`/modular/member/delete.php?id=${id}`);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error delete data");
             return rejectWithValue((error.response?.data?.error || "Error delete data"));
         }
     }

@@ -8,6 +8,9 @@ import priceReducer from "./slices/pricingSlice";
 import projectViewReducer from "./slices/projectViewSlice";
 import contactUsReducer from "./slices/contactUsSlice";
 import authReducer from "./slices/authSlice";
+import projectReducer from "./slices/projectSlice"; 
+import projectMemberReducer from "./slices/projectMember";
+import dashboardReducer from "./slices/dashboardSlice";
 
 
 const store = configureStore({
@@ -20,7 +23,10 @@ const store = configureStore({
         price: priceReducer,
         projectView: projectViewReducer,
         contactUs: contactUsReducer,
-        auth: authReducer
+        auth: authReducer,
+        project: projectReducer,
+        projectMember: projectMemberReducer,
+        dashboard: dashboardReducer
     }
 });
 

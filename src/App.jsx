@@ -21,6 +21,8 @@ import { useEffect } from 'react';
 import LoginPage from './pages/admin/Login';
 import PrivateRoute from './component/layout/PrivateRoute';  // <-- Import PrivateRoute
 import { Navigate } from 'react-router-dom';
+import ProjectDashboard from './pages/admin/ProjectDashboard';
+
 
 function App() {
 
@@ -43,7 +45,7 @@ function App() {
 
 
         {/* Admin Login Route (Public) */}
-        <Route path='/admin/login' element={!auth ? <LoginPage /> : <Navigate to="/admin/dashboard" />} />
+        <Route path='/admin' element={!auth ? <LoginPage /> : <Navigate to="/admin/dashboard" />} />
 
         {/* Admin Routes (Protected by PrivateRoute) */}
         <Route path="/admin/dashboard" element={
@@ -75,6 +77,9 @@ function App() {
         } />
         <Route path='/admin/contact-us' element={
           <PrivateRoute><ContactUsDashboard /></PrivateRoute>
+        } />
+        <Route path='/admin/project' element={
+          <PrivateRoute><ProjectDashboard /></PrivateRoute>
         } />
 
         {/* 404 */}

@@ -15,6 +15,7 @@ import PriceSection from "./Section/PriceSection";
 import ContactSection from "./Section/ContactSection";
 import { getSettings } from "../../../redux/slices/settingSlice";
 import LoadingAnimation from "../../../component/user/LoadingAnimation";
+import { toast } from "react-toastify";
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -26,11 +27,21 @@ const MainPage = () => {
   const { settings, loadingSetting, errorSetting } = useSelector(state => state.settings);
 
   useEffect(() => {
-    dispatch(getAbout());
-    dispatch(getProjectView({ page: 1, limit: 3 }));
-    dispatch(getServicesFeature());
-    dispatch(getPricing({ page: 1, limit: 3 }));
-    dispatch(getSettings());
+    const fetchData = async () => {
+      try {
+        await Promise.all([
+          dispatch(getAbout()),
+          dispatch(getProjectView({ page: 1, limit: 3 })),
+          dispatch(getServicesFeature()),
+          dispatch(getPricing({ page: 1, limit: 3 })),
+          dispatch(getSettings())
+        ]);
+      } catch (error) {
+        toast.warning("Something went wrong, Try again later");
+      }
+    };
+    fetchData();
+
   }, [dispatch]);
 
   if (loading || loadingPricing || loadingProjectViews || loadingServiceFeature || loadingSetting) {
@@ -47,7 +58,7 @@ const MainPage = () => {
           <p className="text-white/80 mb-6">
             {error || errorProjectViews || errorServiceFeature || errorPricing || errorSetting}
           </p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
           >
@@ -63,8 +74,8 @@ const MainPage = () => {
       <AnimatedBackground />
       <NavBar />
       <div className="pt-20 space-y-10">
-        <div id ="cube">
-        <CubeShowcase />
+        <div id="cube">
+          <CubeShowcase />
         </div>
         <div id="home">
           <HomeSection />

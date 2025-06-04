@@ -193,6 +193,7 @@ const ServiceDashboard = () => {
       dispatch(getServices({ page, limit: 10 }));
       dispatch(clearCreatingServiceDetails());
       setDetailDescription("");
+      setIsEditOpen(false);
     } else if (errorCreatingServiceDetail) {
       dispatch(clearCreatingServiceDetails());
       setDetailDescription("");

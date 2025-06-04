@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import request from '../../utils/request';
-import { toast } from 'react-toastify';
 
 export const getAbout = createAsyncThunk(
     "about/getAbout",
@@ -25,7 +24,6 @@ export const createAbout = createAsyncThunk(
             });
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error create data");
             return rejectWithValue((error.response?.data?.error || "Error create data"));
         }
     }
@@ -42,7 +40,6 @@ export const updateAbout = createAsyncThunk(
             });
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error update data");
             return rejectWithValue((error.response?.data?.error || "Error update data"));
         }
     }
@@ -59,7 +56,6 @@ export const updateAboutImage = createAsyncThunk(
             });
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error update image data");
             return rejectWithValue((error.response?.data?.error || "Error update image data"));
         }
     }

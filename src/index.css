@@ -48,3 +48,17 @@
 }
 
 
+@font-face {
+  font-family: 'RomanMelikhov';
+  src: url('./assets/fonts/RomanMelikhov-MixcaseMixed.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'AscentPro';
+  src: url('./assets/fonts/Fontop-AscentProUltraBold.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

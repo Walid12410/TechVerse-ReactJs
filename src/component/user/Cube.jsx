@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import './cube.css'; // Import cube styles
+import image1 from '../../assets/image/image1.jpg';
+import image2 from '../../assets/image/image2.jpg';
+import image3 from '../../assets/image/image3.jpg';
+import image4 from '../../assets/image/image4.jpg';
 
 const CubeShowcase = () => {
   const containerRef = useRef(null);
@@ -96,9 +100,9 @@ const CubeShowcase = () => {
         animate="visible"
       >
         <div
-          style={{ fontFamily: "CelabRegular, sans-serif" }}
+          style={{ fontFamily: "AscentPro, sans-serif" }}
           className={`text-white font-bold italic ${isMobileView ? 'text-4xl' : isTabletView ? 'text-6xl' : 'text-8xl'}`}>
-          Tech VERSE VISION
+          Tech Verse Agency
         </div>
       </motion.div>
 
@@ -146,22 +150,22 @@ const CubeShowcase = () => {
           >
             <div className="cube">
               <div className="cube-face cube-face-front">
-                <img src="/image1.png" alt="front" className="w-full h-full object-cover" />
+                <img src={image1} alt="front" className="w-full h-full object-cover" />
               </div>
               <div className="cube-face cube-face-back">
-                <img src="/image2.png" alt="back" className="w-full h-full object-cover" />
+                <img src={image2} alt="back" className="w-full h-full object-cover" />
               </div>
               <div className="cube-face cube-face-right">
-                <img src="/image3.png" alt="right" className="w-full h-full object-cover" />
+                <img src={image3} alt="right" className="w-full h-full object-cover" />
               </div>
               <div className="cube-face cube-face-left">
-                <img src="/image4.png" alt="left" className="w-full h-full object-cover" />
+                <img src={image4} alt="left" className="w-full h-full object-cover" />
               </div>
               <div className="cube-face cube-face-top">
-                <img src="/image1.png" alt="top" className="w-full h-full object-cover" />
+                <img src={image1} alt="top" className="w-full h-full object-cover" />
               </div>
               <div className="cube-face cube-face-bottom">
-                <img src="/image1.png" alt="bottom" className="w-full h-full object-cover" />
+                <img src={image1} alt="bottom" className="w-full h-full object-cover" />
               </div>
             </div>
           </motion.div>

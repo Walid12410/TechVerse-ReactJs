@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import request from '../../utils/request';
-import { toast } from 'react-toastify';
 
 export const getServices = createAsyncThunk(
     "service/fetchService",
@@ -34,7 +33,6 @@ export const createServiceFeature = createAsyncThunk(
             const response = await request.post(`/modular/service-feature/create.php`,data);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error create data");
             return rejectWithValue((error.response?.data?.error || "Error create data"));
         }
     }
@@ -49,7 +47,6 @@ export const deleteServiceFeature = createAsyncThunk(
             const response = await request.delete(`/modular/service-feature/delete.php?id=${id}`);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error update data");
             return rejectWithValue((error.response?.data?.error || "Error update data"));
         }
     }
@@ -68,7 +65,6 @@ export const createService = createAsyncThunk(
             );
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error fetch data");
             return rejectWithValue((error.response?.data?.error || "Error fetch data"));
         }
     }
@@ -82,7 +78,6 @@ export const createServiceDetails = createAsyncThunk(
             const response = await request.post(`/modular/service-details/create.php`, serviceDetailsData);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error fetch data");
             return rejectWithValue((error.response?.data?.error || "Error fetch data"));
         }
     }
@@ -96,7 +91,6 @@ export const deleteServiceDetail = createAsyncThunk(
             const response = await request.delete(`/modular/service-details/delete.php?id=${id}`);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error deleting data");
             return rejectWithValue((error.response?.data?.error || "Error deleting data"));
         }
     }
@@ -115,7 +109,6 @@ export const changeServiceImage = createAsyncThunk(
             });
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error changing image");
             return rejectWithValue((error.response?.data?.error || "Error changing image"));
         }
     }
@@ -137,7 +130,6 @@ export const updateService = createAsyncThunk(
             );
             return response.data; // ✅ only return the data, not the full Axios response
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error update data");
             return rejectWithValue((error.response?.data?.error || "Error update data"));
         }
     }
@@ -152,7 +144,6 @@ export const deleteService = createAsyncThunk(
             const response = await request.delete(`/modular/service/delete.php?id=${id}`);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error deleting data");
             return rejectWithValue((error.response?.data?.error || "Error deleting data"));
         }
     }

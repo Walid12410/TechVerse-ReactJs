@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import request from '../../utils/request';
-import { toast } from 'react-toastify';
 
 export const getSettings = createAsyncThunk(
     "setting/fetchSetting",
@@ -21,7 +20,6 @@ export const updateSetting = createAsyncThunk(
             const response = await request.put(`/modular/setting/update.php`, data);
             return response.data;
         } catch (error) {
-            toast.error(error.response?.data?.error || "Error update data");
             return rejectWithValue((error.response?.data?.error || "Error update data"));
         }
     }

@@ -9,14 +9,15 @@ import { getSettings } from '../../redux/slices/settingSlice';
 import LoadingAnimation from '../../component/user/LoadingAnimation';
 import { toast } from 'react-toastify';
 import { createContactUs, clearCreateContactUs } from '../../redux/slices/contactUsSlice';
-
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const ContactPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const { settings, loadingSetting, errorSetting } = useSelector((state) => state.settings);
-    const { isCreateContactUs,
+    const {
+        isCreateContactUs,
         loadingCreateContactUs,
         errorCreateContactUs
     } = useSelector((state) => state.contactUs);
@@ -28,6 +29,8 @@ const ContactPage = () => {
         subject: '',
         message: ''
     });
+
+    const [captchaValue, setCaptchaValue] = useState(null);
 
     useEffect(() => {
         dispatch(getSettings());
@@ -43,6 +46,7 @@ const ContactPage = () => {
                 subject: '',
                 message: ''
             });
+            setCaptchaValue(null);
             dispatch(clearCreateContactUs());
         } else if (errorCreateContactUs) {
             toast.error(errorCreateContactUs);
@@ -50,9 +54,38 @@ const ContactPage = () => {
         }
     }, [isCreateContactUs, errorCreateContactUs, dispatch]);
 
-    if (loadingSetting) {
-        return <LoadingAnimation />
-    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (loadingCreateContactUs) return;
+
+        const { name, email, phone_number, subject, message } = formData;
+
+        if (!name || !email || !phone_number || !subject || !message) {
+            toast.error('Please fill all the fields');
+            return;
+        }
+
+        if (!email.includes('@')) {
+            toast.error('Invalid email');
+            return;
+        }
+
+        if (!captchaValue) {
+            toast.error('Please verify that you are not a robot');
+            return;
+        }
+
+        const data = {
+            ...formData,
+            recaptchaToken: captchaValue
+        };
+
+
+        dispatch(createContactUs({ data }));
+    };
+
+    if (loadingSetting) return <LoadingAnimation />;
 
     if (errorSetting) {
         return (
@@ -71,36 +104,11 @@ const ContactPage = () => {
         );
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if (loadingCreateContactUs) {
-            return;
-        }
-
-        if (formData.name === '' || formData.email === '' || formData.message === ''
-            || formData.subject === '' || formData.phone_number === ''
-        ) {
-            toast.error('Please fill all the fields');
-            return;
-        }
-
-
-        if (!formData.email.includes('@')) {
-            toast.error('Invalid email');
-            return;
-        }
-
-        dispatch(createContactUs({data: formData}));
-    }
-
     return (
         <div className="min-h-screen relative">
             <AnimatedBackground />
-
-            {/* Main Content */}
             <div className="relative z-10 pt-20 px-4 sm:px-8 md:px-16 mb-20">
-                {/* Header with Back Button */}
+                {/* Header */}
                 <div className="max-w-6xl mx-auto flex items-center justify-between mb-12">
                     <button
                         onClick={() => navigate(-1)}
@@ -117,18 +125,18 @@ const ContactPage = () => {
                         transition={{ duration: 0.8 }}
                         className="text-center"
                     >
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4"
-                            style={{ fontFamily: "FootbarPro, sans-serif", color: "var(--color-purple)" }}
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 text-white"
+                            style={{ fontFamily: "FootbarPro, sans-serif",  }}
                         >
                             Contact Us
                         </h1>
-                        <p className="text-white/80 text-lg"
+                        <p className="text-white text-lg"
                             style={{ fontFamily: "CelabRegular, sans-serif" }}
                         >
                             Get in touch with us for any inquiries
                         </p>
                     </motion.div>
-                    <div className="w-8"></div> {/* Spacer for balance */}
+                    <div className="w-8" />
                 </div>
 
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -140,83 +148,61 @@ const ContactPage = () => {
                         className="bg-black/50 backdrop-blur-sm p-8 rounded-2xl"
                     >
                         <form className="space-y-6" onSubmit={handleSubmit}>
-                            {/* Name Field */}
+                            {["name", "email", "phone_number", "subject", "message"].map((field) => (
+                                <div key={field}>
+                                    <label className="block text-white mb-2" style={{ fontFamily: "CelabRegular, sans-serif" }}>
+                                        {field.replace("_", " ").replace(/^\w/, c => c.toUpperCase())} {field !== "subject" ? "*" : ""}
+                                    </label>
+                                    {field === "message" ? (
+                                        <textarea
+                                            rows="4"
+                                            required
+                                            value={formData[field]}
+                                            onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-purple-500 focus:outline-none resize-none"
+                                        />
+                                    ) : (
+                                        <input
+                                            type={field === "email" ? "email" : field === "phone_number" ? "tel" : "text"}
+                                            required={field !== "subject"}
+                                            value={formData[field]}
+                                            onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-purple-500 focus:outline-none"
+                                        />
+                                    )}
+                                </div>
+                            ))}
+
+                            {/* reCAPTCHA */}
                             <div>
-                                <label className="block text-white mb-2"
-                                    style={{ fontFamily: "CelabRegular, sans-serif" }}
-                                >
-                                    Name *
-                                </label>
-                                <input
-                                    type="text"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    required
-                                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-purple-500 focus:outline-none transition-colors"
+                                <ReCAPTCHA
+                                    sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                                    onChange={value => setCaptchaValue(value)}
                                 />
                             </div>
 
-                            {/* Email Field */}
-                            <div>
-                                <label className="block text-white mb-2"
-                                    style={{ fontFamily: "CelabRegular, sans-serif" }}
+                            {/* reCAPTCHA Terms Notice */}
+                            <p className="text-xs text-white/50 mt-2">
+                                This site is protected by reCAPTCHA and the Google{' '}
+                                <a
+                                    href="https://policies.google.com/privacy"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="underline hover:text-purple-400"
                                 >
-                                    Email *
-                                </label>
-                                <input
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    required
-                                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-purple-500 focus:outline-none transition-colors"
-                                />
-                            </div>
-
-                            {/* Phone Field */}
-                            <div>
-                                <label className="block text-white mb-2"
-                                    style={{ fontFamily: "CelabRegular, sans-serif" }}
+                                    Privacy Policy
+                                </a>{' '}
+                                and{' '}
+                                <a
+                                    href="https://policies.google.com/terms"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="underline hover:text-purple-400"
                                 >
-                                    Phone Number
-                                </label>
-                                <input
-                                    type="tel"
-                                    value={formData.phone_number}
-                                    onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-purple-500 focus:outline-none transition-colors"
-                                />
-                            </div>
-
-                            {/* Subject Field */}
-                            <div>
-                                <label className="block text-white mb-2"
-                                    style={{ fontFamily: "CelabRegular, sans-serif" }}
-                                >
-                                    Subject
-                                </label>
-                                <input
-                                    value={formData.subject}
-                                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                    type="text"
-                                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-purple-500 focus:outline-none transition-colors"
-                                />
-                            </div>
-
-                            {/* Message Field */}
-                            <div>
-                                <label className="block text-white mb-2"
-                                    style={{ fontFamily: "CelabRegular, sans-serif" }}
-                                >
-                                    Message *
-                                </label>
-                                <textarea
-                                    value={formData.message}
-                                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                    required
-                                    rows="4"
-                                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-purple-500 focus:outline-none transition-colors resize-none"
-                                ></textarea>
-                            </div>
+                                    Terms of Service
+                                </a>{' '}
+                                apply.
+                            </p>
 
                             {/* Submit Button */}
                             <button
@@ -236,82 +222,48 @@ const ContactPage = () => {
                         transition={{ duration: 0.8, delay: 0.4 }}
                         className="bg-black/50 backdrop-blur-sm p-8 rounded-2xl"
                     >
-                        <h2 className="text-2xl font-bold text-white mb-8"
-                            style={{ fontFamily: "FootbarPro, sans-serif" }}
-                        >
+                        <h2 className="text-2xl font-bold text-white mb-8" style={{ fontFamily: "FootbarPro, sans-serif" }}>
                             Contact Information
                         </h2>
 
-                        {/* Contact Methods */}
-                        <div className="space-y-6">
-                            {/* Email */}
-                            <div className="flex items-center space-x-4">
+                        {[{
+                            icon: FaEnvelope,
+                            title: "Email",
+                            value: settings?.email,
+                            href: `mailto:${settings?.email}`
+                        }, {
+                            icon: FaPhone,
+                            title: "Phone",
+                            value: settings?.phone_number,
+                            href: `tel:${settings?.phone_number}`
+                        }, {
+                            icon: FaWhatsapp,
+                            title: "WhatsApp",
+                            value: settings?.whatsapp_url,
+                            href: `https://wa.me/${settings?.whatsapp_url}`
+                        }].map(({ icon: Icon, title, value, href }, i) => (
+                            <div key={i} className="flex items-center space-x-4 mb-6">
                                 <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center">
-                                    <FaEnvelope className="text-white text-xl" />
+                                    <Icon className="text-white text-xl" />
                                 </div>
                                 <div>
-                                    <h3 className="text-white font-semibold"
-                                        style={{ fontFamily: "CelabRegular, sans-serif" }}
-                                    >
-                                        Email
+                                    <h3 className="text-white font-semibold" style={{ fontFamily: "CelabRegular, sans-serif" }}>
+                                        {title}
                                     </h3>
-                                    <a href={`mailto:${settings.email}`}
+                                    <a href={href}
                                         className="text-white/80 hover:text-purple-400 transition-colors"
                                         style={{ fontFamily: "CelabRegular, sans-serif" }}
                                     >
-                                        {settings.email}
+                                        {value}
                                     </a>
                                 </div>
                             </div>
-
-                            {/* Phone */}
-                            <div className="flex items-center space-x-4">
-                                <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center">
-                                    <FaPhone className="text-white text-xl" />
-                                </div>
-                                <div>
-                                    <h3 className="text-white font-semibold"
-                                        style={{ fontFamily: "CelabRegular, sans-serif" }}
-                                    >
-                                        Phone
-                                    </h3>
-                                    <a href={`tel:${settings.phone_number}`}
-                                        className="text-white/80 hover:text-purple-400 transition-colors"
-                                        style={{ fontFamily: "CelabRegular, sans-serif" }}
-                                    >
-                                        {settings.phone_number}
-                                    </a>
-                                </div>
-                            </div>
-
-                            {/* WhatsApp */}
-                            <div className="flex items-center space-x-4">
-                                <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center">
-                                    <FaWhatsapp className="text-white text-xl" />
-                                </div>
-                                <div>
-                                    <h3 className="text-white font-semibold"
-                                        style={{ fontFamily: "CelabRegular, sans-serif" }}
-                                    >
-                                        WhatsApp
-                                    </h3>
-                                    <a href={settings.whatsapp_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-white/80 hover:text-purple-400 transition-colors"
-                                        style={{ fontFamily: "CelabRegular, sans-serif" }}
-                                    >
-                                        Chat with us
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
+                        ))}
                     </motion.div>
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default ContactPage;
