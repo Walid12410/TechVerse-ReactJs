@@ -9,12 +9,12 @@ import { clearCreateMember,
     getMembers, 
     updateMember 
 } from "../../redux/slices/memberSlice";
-import DataTable from "../../component/common/DataTable";
-import FormModal from "../../component/common/FormModal";
-import DeleteModal from "../../component/common/DeleteModal";
-import Pagination from "../../component/common/Pagination";
+import DataTable from "../../component/admin/DataTable";
+import FormModal from "../../component/admin/FormModal";
+import DeleteModal from "../../component/admin/DeleteModal";
+import Pagination from "../../component/admin/Pagination";
 import { toast } from "react-toastify";
-import MemberHeader from "../../component/common/MemberHeader";
+import DashboardHeader from "../../component/admin/DashboardHeader";
 
 const MemberDashboard = () => {
     const dispatch = useDispatch();
@@ -227,18 +227,24 @@ const MemberDashboard = () => {
                 className="rounded-lg shadow p-4 md:p-6 h-[90vh] flex flex-col text-white"
                 style={{ backgroundColor: "var(--color-navy-dark)" }}
             >
-                <h1 className="text-xl md:text-2xl font-bold mb-2 md:mb-2">Member Dashboard</h1>
+                <DashboardHeader title="Members" onAddClick={() => setIsModalOpen(true)} buttonText="Add New Member" />
 
-                <MemberHeader setIsModalOpen={setIsModalOpen}/>
 
                 <DataTable
                     loading={loading}
                     error={error}
                     data={members}
                     columns={columns}
-                    setIsEditOpen={setIsEditOpen}
-                    setSelectedItem={setSelectedMember}
-                    setIsDeleteOpen={setIsDeleteOpen}
+                    actions={{
+                        edit: (item) => {
+                            setIsEditOpen(true);
+                            setSelectedMember(item);
+                        },
+                        delete: (item) => {
+                            setIsDeleteOpen(true);
+                            setSelectedMember(item);
+                        },
+                    }}
                 />
 
                 <div className="mt-auto pt-4 border-t border-gray-600">

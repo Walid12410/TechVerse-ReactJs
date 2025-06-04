@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import { useState, useEffect } from "react";
-import config from "../../../utils/config";
+import config from "../../utils/config";
 
 const AddFeatureModal = ({
     handleModalClose,

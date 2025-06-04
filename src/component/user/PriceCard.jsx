@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import Button from "./button/Button";
+import Button from "./Button";
 
 const PriceCard = ({price, index}) => {
     const ref = useRef(null);

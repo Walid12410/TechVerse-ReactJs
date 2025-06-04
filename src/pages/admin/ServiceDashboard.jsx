@@ -15,17 +15,17 @@ import {
   deleteService,
   clearServiceDelete
 } from "../../redux/slices/serviceSlice";
-import Pagination from "../../component/common/Pagination";
+import Pagination from "../../component/admin/Pagination";
 import { toast } from "react-toastify";
 import AdminLayout from "../../component/layout/AdminLayout";
-import ServiceTable from "../../component/common/services/ServiceTable";
-import ServiceHeader from "../../component/common/services/ServiceHeader";
-import AddServiceModel from "../../component/common/services/AddServiceModel";
-import ViewDetailsModel from "../../component/common/services/ViewDetailsModel";
-import EditServiceModel from "../../component/common/services/EditServiceModel";
-import DeleteServiceModel from "../../component/common/services/DeleteServiceModel";
-import EditImageService from "../../component/common/services/EditImageService";
-
+import AddServiceModel from "../../component/admin/AddServiceModel";
+import ViewDetailsModel from "../../component/admin/ViewDetailsModel";
+import EditServiceModel from "../../component/admin/EditServiceModel";
+import EditImageService from "../../component/admin/EditImageService";
+import DashboardHeader from "../../component/admin/DashboardHeader";
+import DataTable from "../../component/admin/DataTable";
+import config from "../../utils/config";
+import DeleteModal from "../../component/admin/DeleteModal";
 
 const ServiceDashboard = () => {
 
@@ -151,8 +151,7 @@ const ServiceDashboard = () => {
     if (isCreated) {
       handleModalClose();
       dispatch(clearCreatingService());
-      dispatch(getServices({ page: 1, limit: 10 }));
-      // Clear form data after successful creation
+      dispatch(getServices({ page, limit: 10 }));
       setFormData({
         service_name: "",
         service_description: "",
@@ -185,24 +184,13 @@ const ServiceDashboard = () => {
 
     dispatch(createServiceDetails({ serviceDetailsData: data }));
 
-    // Optimistically update UI
-    const tempId = Date.now(); // temporary unique ID
-    const tempDetail = {
-      id: tempId,
-      detail_description: DetailsDescription,
-    };
-
-    setSelectedService(prev => ({
-      ...prev,
-      details: [...prev.details, tempDetail],
-    }));
-
     setDetailDescription(""); // clear input
   };
 
   useEffect(() => {
     if (isServiceDetailCreated) {
       toast.success("Detail added successfully!");
+      dispatch(getServices({ page, limit: 10 }));
       dispatch(clearCreatingServiceDetails());
       setDetailDescription("");
     } else if (errorCreatingServiceDetail) {
@@ -332,6 +320,28 @@ const ServiceDashboard = () => {
     }
   })
 
+  const columns = [
+    {
+      label: "Name",
+      field: "service_name",
+    },
+    {
+      label: "Description",
+      field: "service_description",
+    },
+    {
+      label: "Image",
+      render: (item) => (
+        <img
+          src={`${config.API_BASE_URL}/${item.image_url}`}
+          alt={item.service_name}
+          className="h-10 w-10 rounded object-cover"
+        />
+      ),
+    },
+  ];
+
+  
   return (
     <AdminLayout>
       <div
@@ -339,17 +349,23 @@ const ServiceDashboard = () => {
         style={{ backgroundColor: "var(--color-navy-dark)" }}
       >
 
-        <ServiceHeader setIsModalOpen={setIsModalOpen} />
+        <DashboardHeader title="Services" onAddClick={() => setIsModalOpen(true)} buttonText="Add New Service" />
 
-        <ServiceTable
-          loadingServices={loadingServices}
-          errorServices={errorServices}
-          services={services}
-          handleViewDetails={handleViewDetails}
-          handleEdit={handleEdit}
-          setIsDeleteOpen={setIsDeleteOpen}
-          setDeletingServiceId={setDeletingServiceId}
+        <DataTable
+          loading={loadingServices}
+          error={errorServices}
+          data={services}
+          columns={columns} // Make sure you define appropriate columns for services
+          actions={{
+            view: (item) => handleViewDetails(item),
+            edit: (item) => handleEdit(item),
+            delete: (item) => {
+              setIsDeleteOpen(true);
+              setDeletingServiceId(item.id); // or item.ServiceNo if that's the correct field
+            },
+          }}
         />
+
 
         <div className="mt-auto pt-4 border-t border-gray-600">
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
@@ -403,11 +419,13 @@ const ServiceDashboard = () => {
       )}
 
       {isDeleteOpen && (
-        <DeleteServiceModel
-          handleDeleteService={handleDeleteService}
-          loadingDeleteService={loadingDeleteService}
+          <DeleteModal
+          title="Delete Service"
+          message="Are you sure you want to delete this service?"
+          handleDelete={handleDeleteService}
+          loading={loadingDeleteService}
           setIsDeleteOpen={setIsDeleteOpen}
-          setDeletingServiceId={setDeletingServiceId}
+          setSelectedItem={setDeletingServiceId}
         />
       )}
 

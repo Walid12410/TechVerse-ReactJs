@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FaUser, FaChartPie, FaUsers, FaBox, FaCog, FaCalendar, FaComment } from 'react-icons/fa';
-import AdminSidebar from '../../component/common/AdminSidebar';
+import AdminSidebar from '../../component/admin/AdminSidebar';
 
 const AdminDashboard = () => {
     const [currentDate] = useState(new Date().toLocaleDateString('en-US', {

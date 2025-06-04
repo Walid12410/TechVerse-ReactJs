@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import AnimatedBackground from "../../component/common/AnimationBackground";
+import AnimatedBackground from "../../component/user/AnimationBackground";
 import { useDispatch, useSelector } from "react-redux";
-import TitleSection from "../../component/common/TitleSection";
-import ProjectListCard from "../../component/common/ProjectListCard";
+import TitleSection from "../../component/user/TitleSection";
+import ProjectListCard from "../../component/user/ProjectListCard";
 import { getProjectView } from "../../redux/slices/projectViewSlice";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import LoadingAnimation from "../../component/common/LoadingAnimation";
+import LoadingAnimation from "../../component/user/LoadingAnimation";
 
 const ProjectPage = () => {
     const dispatch = useDispatch();

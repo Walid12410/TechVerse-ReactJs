@@ -11,14 +11,15 @@ import {
     updateProjectViewImage,
     deleteProjectView
 } from "../../redux/slices/projectViewSlice";
-import Pagination from "../../component/common/Pagination";
+import Pagination from "../../component/admin/Pagination";
 import { toast } from "react-toastify";
 import AdminLayout from "../../component/layout/AdminLayout";
-import ProjectViewTable from "../../component/common/ProjectViewTable";
-import ProjectViewHeader from "../../component/common/ProjectViewHeader";
-import AddProjectViewModal from "../../component/common/AddProjectViewModal";
-import EditProjectViewModal from "../../component/common/EditProjectViewModal";
-import DeleteProjectViewModal from "../../component/common/DeleteProjectViewModal";
+import AddProjectViewModal from "../../component/admin/AddProjectViewModal";
+import EditProjectViewModal from "../../component/admin/EditProjectViewModal";
+import DashboardHeader from "../../component/admin/DashboardHeader";
+import DeleteModal from "../../component/admin/DeleteModal";
+import DataTable from "../../component/admin/DataTable";
+import config from "../../utils/config";
 
 const ProjectViewDashboard = () => {
     const dispatch = useDispatch();
@@ -157,8 +158,7 @@ const ProjectViewDashboard = () => {
         if (isProjectViewCreated) {
             handleModalClose();
             dispatch(clearCreateProjectView());
-            dispatch(getProjectView({ page: 1, limit: 6 }));
-            window.location.reload();
+            dispatch(getProjectView({ page, limit: 6 }));
         } else if (errorCreatingProjectView) {
             dispatch(clearCreateProjectView());
         }
@@ -242,22 +242,63 @@ const ProjectViewDashboard = () => {
         }
     }, [isProjectViewDeleted, errorDeletingProjectView]);
 
+
+    const columns = [
+        {
+            label: "Image",
+            render: (item) => {
+                return (
+                    <img
+                        src={`${config.API_BASE_URL}/${item.image_url}`}
+                        alt={item.view_title}
+                        className="h-20 w-20  rounded-lg overflow-hidden object-cover"
+                    />
+                )
+            }
+        },
+        {
+            label: "Title",
+            field: "view_title"
+        },
+        {
+            label: "Description",
+            field: "view_description"
+        },
+        {
+            label: "Link",
+            render: (item) => {
+                return (
+                    <a href={item.view_link} target="_blank" rel="noopener noreferrer">View Project</a>
+                )
+            }
+        },
+    ]
+
     return (
         <AdminLayout>
             <div
                 className="rounded-lg shadow p-4 md:p-6 h-[90vh] flex flex-col text-white"
                 style={{ backgroundColor: "var(--color-navy-dark)" }}
             >
-                <ProjectViewHeader onAddClick={() => setIsModalOpen(true)} />
+                <DashboardHeader title="Project Views" onAddClick={() => setIsModalOpen(true)} buttonText="Add New View" />
 
-                <ProjectViewTable
-                    projectViews={projectViews}
-                    loadingProjectViews={loadingProjectViews}
-                    errorProjectViews={errorProjectViews}
-                    setSelectedProjectView={setSelectedProjectView}
-                    setIsEditOpen={setIsEditOpen}
-                    setDeletingProjectViewId={setDeletingProjectViewId}
-                    setIsDeleteOpen={setIsDeleteOpen}
+
+                <DataTable
+                    data={projectViews}
+                    columns={columns}
+                    loading={loadingProjectViews}
+                    error={errorProjectViews}
+                    actions={{
+                        edit: (item) => {
+                            setIsEditOpen(true);
+                            setSelectedProjectView(item);
+                        },
+                        delete: (item) => {
+                            setIsDeleteOpen(true);
+                            setDeletingProjectViewId(item.id);
+                        },
+
+                    }}
                 />
 
                 <div className="mt-auto pt-4 border-t border-gray-600">
@@ -298,15 +339,17 @@ const ProjectViewDashboard = () => {
                 onCancelImageChange={handleCancelImageChange}
             />
 
-            <DeleteProjectViewModal
-                isOpen={isDeleteOpen}
-                onClose={() => {
-                    setIsDeleteOpen(false);
-                    setDeletingProjectViewId(null);
-                }}
-                onDelete={() => handleDeleteProjectView(deletingProjectViewId)}
-                loadingDeletingProjectView={loadingDeletingProjectView}
-            />
+            
+            {isDeleteOpen && deletingProjectViewId && (
+                <DeleteModal
+                    title="Delete Project View"
+                    message="Are you sure you want to delete this project view?"
+                    handleDelete={() => handleDeleteProjectView(deletingProjectViewId)}
+                    loading={loadingDeletingProjectView}
+                    setIsDeleteOpen={setIsDeleteOpen}
+                    setSelectedItem={setDeletingProjectViewId}
+                />
+            )}
         </AdminLayout>
     );
 };

@@ -13,7 +13,7 @@ import MainPage from './pages/user/MainPage/MainPage';
 import ServicePage from './pages/user/ServicePage';
 import ContactPage from './pages/user/ContactUsPage';
 import ProjectPage from './pages/user/ProjectPage';
-import NotFound from './pages/user/NotFound';
+import NotFound from './pages/NotFound';
 import ContactUsDashboard from './pages/admin/ContactUsDashboard';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkAuth } from './redux/slices/authSlice';

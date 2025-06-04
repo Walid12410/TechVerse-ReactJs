@@ -9,10 +9,12 @@ import {
     deleteServiceFeature,
     getServices
 } from "../../redux/slices/serviceSlice";
-import FeatureTable from "../../component/common/services/FeatureTable";
-import FeatureHeader from "../../component/common/services/FeatureHeader";
-import AddFeatureModal from "../../component/common/services/AddFeatureModal";
+import AddFeatureModal from "../../component/admin/AddFeatureModal";
 import { toast } from "react-toastify";
+import DashboardHeader from "../../component/admin/DashboardHeader";
+import DataTable from "../../component/admin/DataTable";
+import config from "../../utils/config";
+import DeleteModal from "../../component/admin/DeleteModal";
 
 const ServiceFeatureDashboard = () => {
     const dispatch = useDispatch();
@@ -21,7 +23,7 @@ const ServiceFeatureDashboard = () => {
         loadingServiceFeature,
         errorServiceFeature,
         isFeatureCreate,
-        loadingFeatureCreate,
+        loadingFeatureCreate,   
         errorFeatureCreate,
         isFeatureDelete,
         loadingFeatureDelete,
@@ -30,6 +32,8 @@ const ServiceFeatureDashboard = () => {
     } = useSelector(state => state.services);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [selectedFeature, setSelectedFeature] = useState(null);
 
     useEffect(() => {
         dispatch(getServicesFeature());
@@ -53,6 +57,8 @@ const ServiceFeatureDashboard = () => {
             toast.success("Feature deleted successfully!");
             dispatch(clearFeatureDelete());
             dispatch(getServicesFeature());
+            setIsDeleteOpen(false);
+            setSelectedFeature(null);
         } else if (errorFeatureDelete) {
             toast.error(errorFeatureDelete);
             dispatch(clearFeatureDelete());
@@ -83,26 +89,75 @@ const ServiceFeatureDashboard = () => {
         dispatch(createServiceFeature({ data: { service_id: serviceId } }));
     };
     
-    const handleDeleteFeature = (id) => {
+    const handleDeleteFeature = () => {
         if (loadingFeatureDelete) return;
-        dispatch(deleteServiceFeature({ id }));
+        dispatch(deleteServiceFeature({ id: selectedFeature.id }));
     };
 
+
+    const columns = [
+        {
+          label: "Name",
+          render: (item) => (
+            <div>
+              {item.service.service_name}
+            </div>
+          ),
+        },
+        {
+          label: "Description",
+          render: (item) => (
+            <div >
+              {item.service.service_description}
+            </div>
+          ),
+        },
+        {
+          label: "Image",
+          render: (item) => (
+            <img
+              src={`${config.API_BASE_URL}/${item.service.image_url}`}
+              alt={item.service_name}
+              className="h-10 w-10 rounded object-cover"
+            />
+          ),
+        },
+      ];
     return (
         <AdminLayout>
             <div
                 className="rounded-lg shadow p-4 md:p-6 h-[90vh] flex flex-col text-white"
                 style={{ backgroundColor: "var(--color-navy-dark)" }}
             >
-                <FeatureHeader setIsModalOpen={setIsModalOpen} />
+                <DashboardHeader title="Service Features" onAddClick={() => setIsModalOpen(true)} buttonText="Add New Feature" />
 
-                <FeatureTable
-                    loadingFeatures={loadingServiceFeature}
-                    errorFeatures={errorServiceFeature}
-                    features={serviceFeature}
-                    handleDeleteFeature={handleDeleteFeature}
+
+                <DataTable
+                    loading={loadingServiceFeature}
+                    error={errorServiceFeature}
+                    data={serviceFeature}
+                    columns={columns}
+                    actions={{
+                        delete: (item) => {
+                            setIsDeleteOpen(true);
+                            setSelectedFeature(item);
+                        },
+                    }}
                 />
+
+            {isDeleteOpen && selectedFeature && (
+                <DeleteModal
+                    title="Delete Feature"
+                    message="Are you sure you want to delete this feature?"
+                    handleDelete={handleDeleteFeature}
+                    loading={loadingFeatureDelete}
+                    setIsDeleteOpen={setIsDeleteOpen}
+                    setSelectedItem={setSelectedFeature}
+                />
+            )}
+                    
             </div>
+
 
             {isModalOpen && (
                 <AddFeatureModal

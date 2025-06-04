@@ -1,8 +1,8 @@
-import TitleSection from "../../../../component/common/TitleSection";
+import TitleSection from "../../../../component/user/TitleSection";
 import FacebookIcon from "../../../../assets/icon/facebook.png";
 import InstaIcon from "../../../../assets/icon/insta.png";
 import { motion } from "framer-motion";
-import Button from "../../../../component/common/button/Button";
+import Button from "../../../../component/user/Button";
 import { BsTiktok } from "react-icons/bs";
 import { FaLinkedin } from "react-icons/fa";
 

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import TitleSection from "../../../../component/common/TitleSection";
-import PriceCard from "../../../../component/common/PriceCard";
+import TitleSection from "../../../../component/user/TitleSection";
+import PriceCard from "../../../../component/user/PriceCard";
 
 const PriceSection = ({ prices }) => {
     if (!prices || prices.length === 0) {

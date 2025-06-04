@@ -1,8 +1,8 @@
 import React from 'react';
-import AnimatedBackground from '../../component/common/AnimationBackground';
+import AnimatedBackground from '../component/user/AnimationBackground';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../component/common/button/Button';
+import Button from '../component/user/Button';
 
 const NotFound = () => {
     const navigate = useNavigate();

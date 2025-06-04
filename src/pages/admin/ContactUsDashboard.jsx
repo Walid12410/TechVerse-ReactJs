@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import AdminLayout from '../../component/layout/AdminLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import { getContactUs, deleteContactUs, clearDeleteContactUs } from '../../redux/slices/contactUsSlice';
-import ContactUsTable from '../../component/common/ContactUsTable';
-import Pagination from '../../component/common/Pagination';
-import DeleteModal from '../../component/common/DeleteModal';
+import Pagination from '../../component/admin/Pagination';
+import DeleteModal from '../../component/admin/DeleteModal';
 import { toast } from 'react-toastify';
+import DataTable from '../../component/admin/DataTable';
 
 const ContactUsDashboard = () => {
     const dispatch = useDispatch();
@@ -74,15 +74,18 @@ const ContactUsDashboard = () => {
             >
                 <h1 className="text-xl md:text-2xl font-bold mb-2 md:mb-2">Contact Messages</h1>
 
-                {/* Add a header/filter component here if needed in the future */}
 
-                <ContactUsTable
+                <DataTable
                     loading={loadingContactUs}
                     error={errorContactUs}
                     data={contactUs}
                     columns={columns}
-                    setIsDeleteOpen={setIsDeleteOpen}
-                    setSelectedItem={setSelectedContact}
+                    actions={{
+                        delete: (item) => {
+                            setIsDeleteOpen(true);
+                            setSelectedContact(item);
+                        },
+                    }}
                 />
 
                 <div className="mt-auto pt-4 border-t border-gray-600">

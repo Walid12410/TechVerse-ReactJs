@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import ProjectCard from "../../../../component/common/ProjectCard";
-import TitleSection from "../../../../component/common/TitleSection";
-import Button from "../../../../component/common/button/Button";
+import ProjectCard from "../../../../component/user/ProjectCard";
+import TitleSection from "../../../../component/user/TitleSection";
+import Button from "../../../../component/user/Button";
 
 const ProjectSection = ({ projectView, totalRecords }) => {
   if (!projectView || projectView.length === 0) {

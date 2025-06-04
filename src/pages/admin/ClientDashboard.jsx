@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import AdminLayout from "../../component/layout/AdminLayout";
 import { useDispatch, useSelector } from "react-redux";
-import { 
+import {
     getClients,
-    createClient, 
-    updateClient, 
-    deleteClient, 
+    createClient,
+    updateClient,
+    deleteClient,
     clearCreateClient,
     clearUpdateClient,
     clearDeleteClient
 } from "../../redux/slices/clientSlice";
-import DataTable from "../../component/common/DataTable";
-import FormModal from "../../component/common/FormModal";
-import DeleteModal from "../../component/common/DeleteModal";
-import Pagination from "../../component/common/Pagination";
+import DataTable from "../../component/admin/DataTable";
+import FormModal from "../../component/admin/FormModal";
+import DeleteModal from "../../component/admin/DeleteModal";
+import Pagination from "../../component/admin/Pagination";
 import { toast } from "react-toastify";
-import ClientHeader from "../../component/common/ClientHeader";
+import DashboardHeader from "../../component/admin/DashboardHeader";
 
 const ClientDashboard = () => {
     const dispatch = useDispatch();
@@ -69,24 +69,24 @@ const ClientDashboard = () => {
 
     const validateClientForm = (data) => {
         const { first_name, last_name, email, phone_number, country_of_origin } = data;
-       
+
         // Basic required fields check
         if (!first_name || !last_name || !email || !phone_number || !country_of_origin) {
             toast.error("All fields are required");
             return false;
         }
-       
+
         // Length validations
         if (first_name.length > 50) {
             toast.error("First name must be 50 characters or fewer");
             return false;
         }
-       
+
         if (last_name.length > 50) {
             toast.error("Last name must be 50 characters or fewer");
             return false;
         }
-       
+
         if (email.length > 100) {
             toast.error("Email must be 100 characters or fewer");
             return false;
@@ -96,7 +96,7 @@ const ClientDashboard = () => {
             toast.error("Country name must be 100 characters or fewer");
             return false;
         }
-     
+
         // Email format validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
@@ -146,22 +146,22 @@ const ClientDashboard = () => {
 
     const handleCreateClientSubmit = async (e) => {
         e.preventDefault();
-       
+
         if (loadingCreateClient) return;
-       
+
         if (!validateClientForm(formData)) return;
-       
+
         dispatch(createClient({ data: formData }));
     };
 
     const handleEditClientSubmit = async (e) => {
         e.preventDefault();
-       
+
         if (loadingUpdateClient) return;
-       
+
         if (!validateClientForm(formData)) return;
-       
-        dispatch(updateClient({id: selectedClient.id, data:formData}));
+
+        dispatch(updateClient({ id: selectedClient.id, data: formData }));
     };
 
     const handleDeleteClient = () => {
@@ -174,45 +174,45 @@ const ClientDashboard = () => {
     }, [page]);
 
     useEffect(() => {
-        if(isClientCreate){
+        if (isClientCreate) {
             toast.success("Client added successfully!");
-            dispatch(getClients({page: 1, limit: 10}));
+            dispatch(getClients({ page: 1, limit: 10 }));
             dispatch(clearCreateClient());
             handleModalClose();
-        }else if(errorCreateClient){
+        } else if (errorCreateClient) {
             dispatch(clearCreateClient());
             handleModalClose();
         }
-    },[isClientCreate, errorCreateClient]);
+    }, [isClientCreate, errorCreateClient]);
 
-    useEffect(()=>{
-        if(isClientUpdate){
+    useEffect(() => {
+        if (isClientUpdate) {
             toast.success("Client updated successfully!");
-            dispatch(getClients({page, limit:10}));
+            dispatch(getClients({ page, limit: 10 }));
             dispatch(clearUpdateClient());
             handleEditModalClose();
-        }else if(errorUpdateClient){
+        } else if (errorUpdateClient) {
             dispatch(clearUpdateClient());
             handleEditModalClose();
         }
-    },[isClientUpdate, errorUpdateClient]);
+    }, [isClientUpdate, errorUpdateClient]);
 
     useEffect(() => {
-        if(isClientDeleted){
+        if (isClientDeleted) {
             toast.success("Client deleted successfully!");
-            dispatch(getClients({page, limit:10}));
+            dispatch(getClients({ page, limit: 10 }));
             dispatch(clearDeleteClient());
             setIsDeleteOpen(false);
             setSelectedClient(null);
-        }else if(errorDeletingClient){
+        } else if (errorDeletingClient) {
             dispatch(clearDeleteClient());
             setIsDeleteOpen(false);
             setSelectedClient(null);
         }
-    },[isClientDeleted, errorDeletingClient]);
+    }, [isClientDeleted, errorDeletingClient]);
 
     useEffect(() => {
-        if(selectedClient) {
+        if (selectedClient) {
             setFormData({
                 first_name: selectedClient.first_name,
                 last_name: selectedClient.last_name,
@@ -229,18 +229,25 @@ const ClientDashboard = () => {
                 className="rounded-lg shadow p-4 md:p-6 h-[90vh] flex flex-col text-white"
                 style={{ backgroundColor: "var(--color-navy-dark)" }}
             >
-                <h1 className="text-xl md:text-2xl font-bold mb-2 md:mb-2">Client Dashboard</h1>
-
-                <ClientHeader setIsModalOpen={setIsModalOpen}/>
+                <DashboardHeader title="Clients" onAddClick={() => setIsModalOpen(true)} buttonText="Add New Client" />
 
                 <DataTable
                     loading={loading}
                     error={error}
                     data={clients}
                     columns={columns}
-                    setIsEditOpen={setIsEditOpen}
-                    setSelectedItem={setSelectedClient}
-                    setIsDeleteOpen={setIsDeleteOpen}
+                    actions={{
+                        edit: (item) => {
+                            setIsEditOpen(true);
+                            setSelectedClient(item);
+                        },
+                        delete: (item) => {
+                            setIsDeleteOpen(true);
+                            setSelectedClient(item);
+                        },
+                        // Optional: add `view` if needed
+                        // view: (item) => handleViewClient(item)
+                    }}
                 />
 
                 <div className="mt-auto pt-4 border-t border-gray-600">

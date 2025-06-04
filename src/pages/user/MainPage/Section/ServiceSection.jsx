@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import TitleSection from "../../../../component/common/TitleSection";
-import ServiceCard from "../../../../component/common/ServiceCard";
-import Button from "../../../../component/common/button/Button";
+import TitleSection from "../../../../component/user/TitleSection";
+import ServiceCard from "../../../../component/user/ServiceCard";
+import Button from "../../../../component/user/Button";
 
 
 const ServiceSection = ({ services }) => {

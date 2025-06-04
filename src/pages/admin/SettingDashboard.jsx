@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-    FaEnvelope, FaFacebook, FaInstagram, FaLinkedin,
-    FaTwitter, FaWhatsapp, FaPhone, FaSave, FaTiktok
+    FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaWhatsapp, FaPhone, FaSave, FaTiktok
 } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearUpdateSetting, getSettings, updateSetting } from '../../redux/slices/settingSlice';

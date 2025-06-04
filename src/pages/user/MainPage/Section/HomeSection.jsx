@@ -1,7 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import TitleSection from "../../../../component/common/TitleSection";
+import TitleSection from "../../../../component/user/TitleSection";
 
 const HomeSection = () => {
   const containerRef = useRef(null);

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import TitleSection from "../../../../component/common/TitleSection";
+import TitleSection from "../../../../component/user/TitleSection";
 
 // Animation Variants
 const containerVariants = {

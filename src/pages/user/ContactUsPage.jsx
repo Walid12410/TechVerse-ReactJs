@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import AnimatedBackground from '../../component/common/AnimationBackground';
+import AnimatedBackground from '../../component/user/AnimationBackground';
 import { FaWhatsapp, FaEnvelope, FaPhone } from 'react-icons/fa';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSettings } from '../../redux/slices/settingSlice';
-import LoadingAnimation from '../../component/common/LoadingAnimation';
+import LoadingAnimation from '../../component/user/LoadingAnimation';
 import { toast } from 'react-toastify';
 import { createContactUs, clearCreateContactUs } from '../../redux/slices/contactUsSlice';
 

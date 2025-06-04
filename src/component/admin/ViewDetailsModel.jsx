@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import config from "../../../utils/config";
+import config from "../../utils/config";
 
 const ViewDetailsModel = ({
     handleDetailsClose,

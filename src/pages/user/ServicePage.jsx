@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import AnimatedBackground from "../../component/common/AnimationBackground";
+import AnimatedBackground from "../../component/user/AnimationBackground";
 import { useDispatch, useSelector } from "react-redux";
-import TitleSection from "../../component/common/TitleSection";
-import ServiceCard from "../../component/common/ServiceCard";
+import TitleSection from "../../component/user/TitleSection";
+import ServiceCard from "../../component/user/ServiceCard";
 import { getServices } from "../../redux/slices/serviceSlice";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import LoadingAnimation from "../../component/common/LoadingAnimation";
+import LoadingAnimation from "../../component/user/LoadingAnimation";
 
 const ServicePage = () => {
     const dispatch = useDispatch();

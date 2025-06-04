@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import NavBar from "../../../component/common/Navbar";
+import NavBar from "../../../component/user/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { getAbout } from "../../../redux/slices/aboutSlice";
 import { getProjectView } from "../../../redux/slices/projectViewSlice";
 import { getServicesFeature } from "../../../redux/slices/serviceSlice";
 import { getPricing } from "../../../redux/slices/pricingSlice";
-import AnimatedBackground from "../../../component/common/AnimationBackground";
-import CubeShowcase from "../../../component/common/cube/Cube";
+import AnimatedBackground from "../../../component/user/AnimationBackground";
+import CubeShowcase from "../../../component/user/Cube";
 import AboutSection from "./Section/AboutSection";
 import ProjectSection from "./Section/ProjectSection";
 import HomeSection from "./Section/HomeSection";
@@ -14,7 +14,7 @@ import ServiceSection from "./Section/ServiceSection";
 import PriceSection from "./Section/PriceSection";
 import ContactSection from "./Section/ContactSection";
 import { getSettings } from "../../../redux/slices/settingSlice";
-import LoadingAnimation from "../../../component/common/LoadingAnimation";
+import LoadingAnimation from "../../../component/user/LoadingAnimation";
 
 const MainPage = () => {
   const dispatch = useDispatch();

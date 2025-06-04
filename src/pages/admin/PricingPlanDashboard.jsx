@@ -13,15 +13,16 @@ import {
     deletePrice,
     clearCreatePrice
 } from "../../redux/slices/pricingSlice";
-import Pagination from "../../component/common/Pagination";
+import Pagination from "../../component/admin/Pagination";
 import { toast } from "react-toastify";
 import AdminLayout from "../../component/layout/AdminLayout";
-import PricingPlanHeader from "../../component/common/PricingPlanHeader";
-import PricingPlanTable from "../../component/common/PricingPlanTable";
-import AddPricingPlanModal from "../../component/common/AddPricingPlanModal";
-import EditPricingPlanModal from "../../component/common/EditPricingPlanModal";
-import ViewPricingDetailsModal from "../../component/common/ViewPricingDetailsModal";
-import DeletePricingPlanModal from "../../component/common/DeletePricingPlanModal";
+import AddPricingPlanModal from "../../component/admin/AddPricingPlanModal";
+import EditPricingPlanModal from "../../component/admin/EditPricingPlanModal";
+import ViewPricingDetailsModal from "../../component/admin/ViewPricingDetailsModal";
+import DashboardHeader from "../../component/admin/DashboardHeader";
+import DataTable from "../../component/admin/DataTable";
+import DeleteModal from "../../component/admin/DeleteModal";
+
 
 const PricingPlanDashboard = () => {
     const dispatch = useDispatch();
@@ -135,8 +136,7 @@ const PricingPlanDashboard = () => {
         if (isPricingCreated) {
             handleModalClose();
             dispatch(clearCreatePrice());
-            dispatch(getPricing({ page: 1, limit: 10 }));
-            window.location.reload();
+            dispatch(getPricing({ page, limit: 10 }));
         } else if (errorCreatingPricing) {
             dispatch(clearCreatePrice());
         }
@@ -162,19 +162,9 @@ const PricingPlanDashboard = () => {
 
         dispatch(createPricingDetails({ data }))
             .then(() => {
-                // Optimistically update UI
-                const tempId = Date.now();
-                const tempDetail = {
-                    id: tempId,
-                    pricing_detail: detailDescription,
-                };
-
-                setSelectedPricing(prev => ({
-                    ...prev,
-                    details: [...(prev.details || []), tempDetail],
-                }));
-
                 setDetailDescription("");
+                dispatch(getPricing({ page, limit: 10 }));
+                handleEditClose();
             })
             .catch((error) => {
                 console.error("Error creating pricing detail:", error);
@@ -186,6 +176,7 @@ const PricingPlanDashboard = () => {
         if (isPricingDetailsCreated) {
             toast.success("Detail added successfully!");
             dispatch(clearCreatePricingDetails());
+            
             setDetailDescription("");
         } else if (errorCreatingPricingDetails) {
             dispatch(clearCreatePricingDetails());
@@ -208,10 +199,10 @@ const PricingPlanDashboard = () => {
             });
     };
 
-    const handleDeletePricing = (id) => {
+    const handleDeletePricing = () => {
         if (loadingDeletingPrice) return;
 
-        dispatch(deletePrice({ id }))
+        dispatch(deletePrice({ id: deletingPricingId }))
             .then(() => {
                 setIsDeleteOpen(false);
                 setDeletingPricingId(null);
@@ -277,23 +268,50 @@ const PricingPlanDashboard = () => {
         }
     }, [isPricingUpdated, errorUpdatePricing]);
 
+    const columns = [
+        {
+          label: "Plan Title",
+          field: "plan_title",
+        },
+        {
+          label: "Price",
+          field: "price",
+        },
+        {
+            label: "Description",
+            field: "plan_description",
+        },
+        {
+          label: "Billing Period",
+          field: "billing_period",
+        },
+    ];
+    
+
     return (
         <AdminLayout>
             <div
                 className="rounded-lg shadow p-4 md:p-6 h-[90vh] flex flex-col text-white"
                 style={{ backgroundColor: "var(--color-navy-dark)" }}
             >
-                <PricingPlanHeader onAddClick={() => setIsModalOpen(true)} />
-
-                <PricingPlanTable
-                    pricing={pricing}
-                    loadingPricing={loadingPricing}
-                    errorPricing={errorPricing}
-                    onViewDetails={handleViewDetails}
-                    onEdit={handleEdit}
-                    onDelete={(id) => {
-                        setDeletingPricingId(id);
-                        setIsDeleteOpen(true);
+                <DashboardHeader title="Pricing Plans" onAddClick={() => setIsModalOpen(true)} buttonText="Add New Plan" />
+           
+                <DataTable
+                    loading={loadingPricing}
+                    error={errorPricing}
+                    data={pricing}
+                    columns={columns}
+                    actions={{
+                        edit: (item) => {
+                            handleEdit(item);
+                        },
+                        delete: (item) => {
+                            setDeletingPricingId(item.id);
+                            setIsDeleteOpen(true);
+                        },
+                        view: (item) => {
+                            handleViewDetails(item);
+                        }
                     }}
                 />
 
@@ -337,15 +355,18 @@ const PricingPlanDashboard = () => {
                 loadingCreatingPricingDetails={loadingCreatingPricingDetails}
             />
 
-            <DeletePricingPlanModal
-                isOpen={isDeleteOpen}
-                onClose={() => {
-                    setIsDeleteOpen(false);
-                    setDeletingPricingId(null);
-                }}
-                onDelete={() => handleDeletePricing(deletingPricingId)}
-                loadingDeletingPrice={loadingDeletingPrice}
-            />
+  
+            {isDeleteOpen && (
+                <DeleteModal
+                    title="Delete Pricing Plan"
+                    message="Are you sure you want to delete this pricing plan?"
+                    loading={loadingDeletingPrice}
+                    handleDelete={handleDeletePricing}
+                    setIsDeleteOpen={setIsDeleteOpen}
+                    setSelectedItem={setDeletingPricingId}
+                />
+            )}
+
         </AdminLayout>
     );
 };
