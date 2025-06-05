@@ -149,6 +149,17 @@ export const deleteService = createAsyncThunk(
     }
 );
 
+export const getServiceName = createAsyncThunk(
+    "service/getServiceName",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await request.get(`/modular/service/get-service-name.php`);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue((error.response?.data?.error || "Error deleting data"));
+        }
+    }
+);
 
 
 
@@ -187,7 +198,10 @@ const serviceSlice = createSlice({
         errorFeatureCreate: null,
         isFeatureDelete: false,
         loadingFeatureDelete: false,
-        errorFeatureDelete: null
+        errorFeatureDelete: null,
+        serviceName: [],
+        loadingServiceName: false,
+        errorServiceName: null,
     },
     reducers: {
         clearCreatingService: (state) => {
@@ -373,6 +387,20 @@ const serviceSlice = createSlice({
             .addCase(deleteService.rejected, (state, action) => {
                 state.loadingDeleteService = false;
                 state.errorDeletingService = action.payload || "Failed to delete service";
+            });
+        // get service name
+        builder
+            .addCase(getServiceName.pending, (state) => {
+                state.loadingServiceName = true;
+                state.errorServiceName = null;
+            })
+            .addCase(getServiceName.fulfilled, (state, action) => {
+                state.loadingServiceName = false;
+                state.serviceName = action.payload.data;
+            })
+            .addCase(getServiceName.rejected, (state, action) => {
+                state.loadingServiceName = false;
+                state.errorServiceName = action.payload || "Failed to get service name";
             });
     }
 });

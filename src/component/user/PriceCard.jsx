@@ -25,14 +25,15 @@ const PriceCard = ({price, index}) => {
             <div className="flex flex-col gap-2 text-center h-full">
                 {/* Title */}
                 <motion.h3 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ delay: 0.3 * index + 0.2 }}
-                    className="text-3xl font-bold text-white" 
-                    style={{ fontFamily: "CelabRegular, sans-serif", color: "var(--color-purple)" }}
-                >
-                    {price?.plan_title}
-                </motion.h3>
+  initial={{ opacity: 0, y: 20 }}
+  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+  transition={{ delay: 0.3 * index + 0.2 }}
+  className="text-3xl font-bold glow-text"
+  style={{ fontFamily: "CelabRegular, sans-serif" }}
+>
+  {price?.plan_title}
+</motion.h3>
+
 
                 {/* Price */}
                 <motion.div 

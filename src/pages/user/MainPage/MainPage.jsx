@@ -3,7 +3,7 @@ import NavBar from "../../../component/user/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { getAbout } from "../../../redux/slices/aboutSlice";
 import { getProjectView } from "../../../redux/slices/projectViewSlice";
-import { getServicesFeature } from "../../../redux/slices/serviceSlice";
+import { getServiceName, getServicesFeature } from "../../../redux/slices/serviceSlice";
 import { getPricing } from "../../../redux/slices/pricingSlice";
 import AnimatedBackground from "../../../component/user/AnimationBackground";
 import CubeShowcase from "../../../component/user/Cube";
@@ -16,6 +16,8 @@ import ContactSection from "./Section/ContactSection";
 import { getSettings } from "../../../redux/slices/settingSlice";
 import LoadingAnimation from "../../../component/user/LoadingAnimation";
 import { toast } from "react-toastify";
+import ServiceNameSection from "./Section/ServiceNameSection";
+import LogoImage from "../../../assets/image/logo.png";
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -25,6 +27,8 @@ const MainPage = () => {
   const { serviceFeature, loadingServiceFeature, errorServiceFeature } = useSelector(state => state.services);
   const { pricing, loadingPricing, errorPricing } = useSelector(state => state.price);
   const { settings, loadingSetting, errorSetting } = useSelector(state => state.settings);
+  const { serviceName, loadingServiceName, errorServiceName } = useSelector(state => state.services);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +38,8 @@ const MainPage = () => {
           dispatch(getProjectView({ page: 1, limit: 3 })),
           dispatch(getServicesFeature()),
           dispatch(getPricing({ page: 1, limit: 3 })),
-          dispatch(getSettings())
+          dispatch(getSettings()),
+          dispatch(getServiceName())
         ]);
       } catch (error) {
         toast.warning("Something went wrong, Try again later");
@@ -44,19 +49,19 @@ const MainPage = () => {
 
   }, [dispatch]);
 
-  if (loading || loadingPricing || loadingProjectViews || loadingServiceFeature || loadingSetting) {
+  if (loading || loadingPricing || loadingServiceName || loadingProjectViews || loadingServiceFeature || loadingSetting) {
     return <LoadingAnimation />;
   }
 
   // Check for any errors
-  const hasError = error || errorProjectViews || errorServiceFeature || errorPricing || errorSetting;
+  const hasError = error || errorProjectViews || errorServiceName || errorServiceFeature || errorPricing || errorSetting;
   if (hasError) {
     return (
       <div className="min-h-screen bg-black/90 flex items-center justify-center">
         <div className="text-center p-8 rounded-lg bg-gray-900/50 backdrop-blur-sm">
           <h2 className="text-2xl font-bold text-red-500 mb-4">Oops! Something went wrong</h2>
           <p className="text-white/80 mb-6">
-            {error || errorProjectViews || errorServiceFeature || errorPricing || errorSetting}
+            {error || errorProjectViews || errorServiceName || errorServiceFeature || errorPricing || errorSetting}
           </p>
           <button
             onClick={() => window.location.reload()}
@@ -76,6 +81,7 @@ const MainPage = () => {
       <div className="pt-20 space-y-10">
         <div id="cube">
           <CubeShowcase />
+          <ServiceNameSection serviceName={serviceName} icon={LogoImage} />
         </div>
         <div id="home">
           <HomeSection />

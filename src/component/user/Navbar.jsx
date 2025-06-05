@@ -1,5 +1,7 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import LogoImage from "../../assets/image/logo.png";
+import XImage from "../../assets/image/x.png";
 
 const NavBar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -15,16 +17,18 @@ const NavBar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 py-2">
-      <a href="#home" className="h-30 w-56 hidden md:block">
-        <img src="/logo.png" alt="Tech Verse" className="object-fill" />
+      <a href="#home" className="h-15 w-20 hidden md:block">
+        <img src={LogoImage} alt="Tech Verse" className="object-fill text-white" />
       </a>
 
       <div className="flex items-center gap-4 ml-auto relative">
         <div className="relative">
           {isDropdownOpen ? (
-            <X className="w-15 h-15 cursor-pointer text-white" onClick={() => setDropdownOpen(false)} />
+            <img src={XImage} alt="Tech Verse" className="object-cover cursor-pointer w-10 h-10 mr-5 text-white" onClick={() => setDropdownOpen(false)}/>
+
           ) : (
             <Menu className="w-15 h-15 cursor-pointer text-white" onClick={() => setDropdownOpen(true)} />
+
           )}
 
           {isDropdownOpen && (
