@@ -22,6 +22,7 @@ import LoginPage from './pages/admin/Login';
 import PrivateRoute from './component/layout/PrivateRoute';  // <-- Import PrivateRoute
 import { Navigate } from 'react-router-dom';
 import ProjectDashboard from './pages/admin/ProjectDashboard';
+import ProjectDetailDashboard from './pages/admin/ProjectDetailDashboard';
 
 
 function App() {
@@ -78,8 +79,11 @@ function App() {
         <Route path='/admin/contact-us' element={
           <PrivateRoute><ContactUsDashboard /></PrivateRoute>
         } />
-        <Route path='/admin/project' element={
-          <PrivateRoute><ProjectDashboard /></PrivateRoute>
+          <Route path='/admin/project' element={
+            <PrivateRoute><ProjectDashboard /></PrivateRoute>
+          } />
+        <Route path='/admin/project-detail/:id' element={
+          <PrivateRoute><ProjectDetailDashboard /></PrivateRoute>
         } />
 
         {/* 404 */}

@@ -6,7 +6,8 @@ import Pagination from "../../component/admin/Pagination";
 import { format } from "date-fns";
 import DashboardHeader from "../../component/admin/DashboardHeader";
 import config from "../../utils/config";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaTrash, FaEye } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 
 const ProjectDashboard = () => {
@@ -71,11 +72,12 @@ const ProjectDashboard = () => {
                                     </p>
                                 </div>
                                 <div className="flex justify-end gap-2 mt-4">
-                                    <button 
+                                    <Link 
                                         className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer"
+                                        to={`/admin/project-detail/${project.id}`}
                                     >
-                                        <FaEdit />
-                                    </button>
+                                        <FaEye />
+                                    </Link>
                                     <button 
                                         className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors cursor-pointer"
                                     >

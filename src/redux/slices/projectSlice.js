@@ -188,7 +188,7 @@ const projectSlice = createSlice({
             })
             .addCase(getProjectById.fulfilled, (state, action) => {
                 state.loadingCurrentProject = false;
-                state.currentProject = action.payload.data;
+                state.currentProject = action.payload;
             })
             .addCase(getProjectById.rejected, (state, action) => {
                 state.loadingCurrentProject = false;

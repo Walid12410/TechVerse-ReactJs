@@ -16,8 +16,9 @@ import {
   RiContactsBook2Line
 } from 'react-icons/ri';
 
-const AdminSidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
+  // Remove local state since it's now managed by parent
+  // const [isCollapsed, setIsCollapsed] = useState(false);
 
   const menuItems = [
     { title: 'Dashboard', icon: <RiDashboardLine size={24} />, path: '/admin/dashboard' },
@@ -34,9 +35,9 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <div
+    <div 
      style={{backgroundColor: "var(--color-navy-dark)"}}
-     className={`text-white h-screen transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'}`}>
+     className={`fixed left-0 top-0 text-white h-screen transition-all duration-300 z-50 ${isCollapsed ? 'w-20' : 'w-64'}`}>
       <div className="p-4 flex items-center justify-between">
         {!isCollapsed && <h1 className="text-xl font-bold">Admin Panel</h1>}
         <button
@@ -47,7 +48,7 @@ const AdminSidebar = () => {
         </button>
       </div>
 
-      <nav className="mt-8">
+      <nav className="mt-8 overflow-y-auto h-[calc(100vh-100px)]">
         {menuItems.map((item, index) => (
           <Link
             key={index}
@@ -63,4 +64,4 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar; 
+export default AdminSidebar;
