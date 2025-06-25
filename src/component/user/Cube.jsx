@@ -100,7 +100,7 @@ const CubeShowcase = () => {
         animate="visible"
       >
         <div
-          style={{ fontFamily: "AscentPro, sans-serif" }}
+          style={{ fontFamily: "CelabRegular, sans-serif" }}
           className={`text-white font-bold italic ${isMobileView ? 'text-4xl' : isTabletView ? 'text-6xl' : 'text-8xl'}`}>
           Tech Verse Agency
         </div>
@@ -123,13 +123,14 @@ const CubeShowcase = () => {
             <h2
               style={{ fontFamily: "CelabRegular, sans-serif" }}
               className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2 sm:mb-4 w-full text-center">
-              Amazing 3D Showcase
+              YOUR DIGITAL UNIVERSE
             </h2>
             <p
               style={{ fontFamily: "FootbarPro, sans-serif" }}
 
               className="text-sm sm:text-base lg:text-lg text-white w-full text-center">
-              Explore our interactive cube that displays multiple perspectives with each scroll. Move your mouse and scroll to see the cube rotate.
+              Step into a world where creativity meets code. From sleek websites to powerful mobile apps, we craft digital solutions tailored to your brand. Scroll to explore the full experience.
+
             </p>
           </motion.div>
         )}
@@ -198,13 +199,13 @@ const CubeShowcase = () => {
               style={{ fontFamily: "CelabRegular, sans-serif" }}
 
               className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2 sm:mb-4 w-full text-center">
-              Innovative Technology
+              DIGITAL POWERHOUSE
             </h2>
             <p
               style={{ fontFamily: "FootbarPro, sans-serif" }}
 
               className="text-sm sm:text-base lg:text-lg text-white w-full text-center">
-              We leverage cutting-edge technologies to create immersive digital experiences. Our solutions are built with the latest frameworks and tools.
+              We blend UI/UX design, branding, marketing, and development into one seamless journey. With cutting-edge tools and smart strategies, we boost your presence across every platform.
             </p>
           </motion.div>
         )}
@@ -218,10 +219,10 @@ const CubeShowcase = () => {
               style={{ y: textY }}
             >
               <h2 className="text-xl font-bold text-white mb-2 text-center">
-                Amazing 3D Showcase
+              YOUR DIGITAL UNIVERSE
               </h2>
               <p className="text-sm text-white text-center">
-                Explore our interactive cube that displays multiple perspectives. Move your mouse to see the cube rotate.
+              Step into a world where creativity meets code. From sleek websites to powerful mobile apps, we craft digital solutions tailored to your brand. Scroll to explore the full experience.
               </p>
             </motion.div>
 
@@ -231,10 +232,10 @@ const CubeShowcase = () => {
               style={{ y: textY }}
             >
               <h2 className="text-xl font-bold text-white mb-2 text-center">
-                Innovative Technology
+              DIGITAL POWERHOUSE
               </h2>
               <p className="text-sm text-white text-center">
-                We leverage cutting-edge technologies to create immersive digital experiences built for optimal performance.
+              We blend UI/UX design, branding, marketing, and development into one seamless journey. With cutting-edge tools and smart strategies, we boost your presence across every platform.
               </p>
             </motion.div>
           </>

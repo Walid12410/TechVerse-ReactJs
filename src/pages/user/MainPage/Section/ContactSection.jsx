@@ -67,13 +67,12 @@ const ContactSection = ({setting}) => {
                 <div className="w-1/2">
                     <motion.div
                         variants={titleVariants}
-                        className="text-3xl sm:text-5xl md:text-7xl font-bold text-white"
+                        className="text-3xl sm:text-5xl md:text-7xl font-bold text-white mb-10"
                         style={{
                             fontFamily: "FootbarPro, sans-serif",
-                            color: "var(--color-purple)"
                         }}
                     >
-                        Unlock Your Brand's Full Potential
+                        Turn Your <span style={{color: "var(--color-purple)"}}>Ideas</span> Into Impact
                     </motion.div>
 
                     <motion.p
@@ -81,8 +80,10 @@ const ContactSection = ({setting}) => {
                         className="text-sm font-bold text-white mt-2 mb-20"
                         style={{ fontFamily: "CelabRegular, sans-serif" }}
                     >
-                        Ready to elevate your brand? Schedule a call to discuss your project and discover
-                        how we can bring your vision to life.
+                        Have an idea, project, or vision? We’re here to help you bring it to life.
+                        Whether you’re launching a startup or scaling a brand, our team is ready to craft
+                        digital solutions that make an impact. Reach out, and let’s 
+                        start building your success — together.
                     </motion.p>
                 </div>
 

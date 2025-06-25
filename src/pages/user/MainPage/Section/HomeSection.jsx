@@ -48,7 +48,7 @@ const HomeSection = () => {
             className="text-3xl sm:text-5xl md:text-7xl font-bold text-white"
             style={{ fontFamily: "FootbarPro, sans-serif" }}
           >
-            Elevate Your
+            Empower Your
           </p>
           <p
             className="text-3xl sm:text-5xl md:text-7xl font-bold"
@@ -57,13 +57,13 @@ const HomeSection = () => {
               color: "var(--color-purple)",
             }}
           >
-            Brand
+            Vision
           </p>
           <p
             className="text-3xl sm:text-5xl md:text-7xl font-bold text-white"
             style={{ fontFamily: "FootbarPro, sans-serif" }}
           >
-            With
+            With 
           </p>
         </motion.div>
 
@@ -74,7 +74,7 @@ const HomeSection = () => {
           className="text-3xl sm:text-5xl md:text-7xl font-bold text-white"
           style={{ fontFamily: "FootbarPro, sans-serif" }}
         >
-          Subscription Design Service
+          Next-Gen Digital Services
         </motion.p>
 
         <motion.div
@@ -87,9 +87,9 @@ const HomeSection = () => {
             className="text-xs sm:text-sm text-white"
             style={{ fontFamily: "CelabRegular, sans-serif" }}
           >
-            Pellentesque habitant morbi tristique senectus et netus et malesuada
-            fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,
-            ultricies eget, tempor sit amet, ante.
+            From design to deployment, we offer full-stack solutions that elevate your brand.
+            Whether it's web development, UI/UX, mobile apps, or marketing our subscription-based model gives you the 
+            creative edge, consistently and efficiently.
           </p>
         </motion.div>
 
