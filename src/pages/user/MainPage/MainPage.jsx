@@ -76,30 +76,49 @@ const MainPage = () => {
 
   return (
     <>
-      <AnimatedBackground />
       <NavBar />
-      <div className="pt-20 space-y-10">
-        <div id="cube">
-          <CubeShowcase />
-          <ServiceNameSection serviceName={serviceName} icon={LogoImage} />
+      <div className="pt-20 space-y-10 relative" style={{ backgroundColor: 'var(--color-animation-background)' }}>
+        <div id="cube" className="relative overflow-hidden" style={{ backgroundColor: 'var(--color-animation-background)' }}>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute top-0 left-0 w-full h-full object-cover z-0"
+            src="/Vid1.mp4"
+          />
+          <div className="relative z-10">
+            <CubeShowcase />
+            <ServiceNameSection serviceName={serviceName} icon={LogoImage} />
+          </div>
         </div>
-        <div id="home">
+        <div id="home" style={{ backgroundColor: 'var(--color-animation-background)' }}>
           <HomeSection />
         </div>
-        <div id="about">
+        <div id="about"  style={{ backgroundColor: 'var(--color-animation-background)' }}>
           <AboutSection aboutUs={aboutUs} />
         </div>
-        <div id="services">
+        <div id="services"  style={{ backgroundColor: 'var(--color-animation-background)' }}>
           <ServiceSection services={serviceFeature} />
         </div>
-        <div id="projects">
+        <div id="projects"  style={{ backgroundColor: 'var(--color-animation-background)' }}>
           <ProjectSection projectView={projectViews} totalRecords={totalRecords} />
         </div>
-        <div id="pricing">
+        <div id="pricing"  style={{ backgroundColor: 'var(--color-animation-background)' }}>
           <PriceSection prices={pricing} />
         </div>
-        <div id="contact" >
+        <div id="contact" className="relative overflow-hidden" style={{ backgroundColor: 'var(--color-animation-background)' }}>
+        <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute top-0 left-0 w-full h-full object-cover z-0"
+            src="/Vid1.mp4"
+          />
+          <div className="relative z-10">
           <ContactSection setting={settings} />
+          </div>
         </div>
       </div>
     </>

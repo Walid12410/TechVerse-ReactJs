@@ -11,7 +11,7 @@ import {
     clearDeleteProjectDetail,
     clearUpdateProject
 } from "../../redux/slices/projectSlice";
-import { getProjectMember, createProjectMember, deleteProjectMember, clearCreateProjectMember, clearDeleteProjectMember } from "../../redux/slices/projectMember";
+import { getMembers } from "../../redux/slices/memberSlice";
 import { format } from "date-fns";
 import DashboardHeader from "../../component/admin/DashboardHeader";
 import config from "../../utils/config";
@@ -25,8 +25,14 @@ const ProjectDetailDashboard = () => {
     const navigate = useNavigate();
     
     // Redux state
-    const { currentProject, loadingCurrentProject, errorCurrentProject, isProjectUpdated, isProjectDetailCreated, isProjectDetailDeleted } = useSelector((state) => state.project);
-    const { projectMembers, loadingProjectMembers, isProjectMemberCreated, isProjectMemberDeleted } = useSelector((state) => state.projectMember);
+    const { currentProject,
+        loadingCurrentProject,
+        errorCurrentProject,
+        isProjectUpdated,
+        isProjectDetailCreated,
+        isProjectDetailDeleted
+    } = useSelector((state) => state.project);
+    const { members } = useSelector((state) => state.members);
     
     // Form states
     const [projectForm, setProjectForm] = useState({
@@ -36,8 +42,6 @@ const ProjectDetailDashboard = () => {
         start_date: "",
         end_date: ""
     });
-    
-    const [imageFile, setImageFile] = useState(null);
     
     const [memberForm, setMemberForm] = useState({
         member_id: "",
@@ -82,32 +86,12 @@ const ProjectDetailDashboard = () => {
             toast.success("Project detail deleted successfully!");
         }
     }, [isProjectDetailDeleted, dispatch, id]);
-
-    // Clear states and refetch data after project member creation
-    useEffect(() => {
-        if (isProjectMemberCreated) {
-            dispatch(clearCreateProjectMember());
-            dispatch(getProjectMember({ id }));
-            dispatch(getProjectById({ id }));
-            toast.success("Project member added successfully!");
-        }
-    }, [isProjectMemberCreated, dispatch, id]);
-
-    // Clear states and refetch data after project member deletion
-    useEffect(() => {
-        if (isProjectMemberDeleted) {
-            dispatch(clearDeleteProjectMember());
-            dispatch(getProjectMember({ id }));
-            dispatch(getProjectById({ id }));
-            toast.success("Project member removed successfully!");
-        }
-    }, [isProjectMemberDeleted, dispatch, id]);
     
-    // Fetch project data
+    // Fetch project data and members
     useEffect(() => {
         if (id) {
             dispatch(getProjectById({ id }));
-            dispatch(getProjectMember({ id }));
+            dispatch(getMembers({ page: 1, limit: 1000 })); // Fetch all members for dropdown
         }
     }, [dispatch, id]);
     
@@ -133,6 +117,15 @@ const ProjectDetailDashboard = () => {
         }));
     };
     
+    // Handle member form changes
+    const handleMemberFormChange = (e) => {
+        const { name, value } = e.target;
+        setMemberForm(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+    
     // Handle project form submit
     const handleProjectFormSubmit = (e) => {
         e.preventDefault();
@@ -143,34 +136,21 @@ const ProjectDetailDashboard = () => {
             return;
         }
         
-        const formData = new FormData();
-        Object.keys(projectForm).forEach(key => {
-            formData.append(key, projectForm[key]);
-        });
-        
-        dispatch(updateProject({ id, data: formData }));
-    };
-    
-    // Handle image upload
-    const handleImageUpload = (e) => {
-        e.preventDefault();
-        if (!imageFile) {
-            toast.error("Please select an image to upload");
-            return;
-        }
-        
-        const formData = new FormData();
-        formData.append("image", imageFile);
-        
-        dispatch(updateProject({ id, data: formData }));
+        // Send as JSON data instead of FormData
+        dispatch(updateProject({ id, data: projectForm }));
     };
     
     // Handle member form submit
     const handleMemberFormSubmit = (e) => {
         e.preventDefault();
         
+        if (!memberForm.member_id) {
+            toast.error("Please select a member");
+            return;
+        }
+        
         // Validate member cost
-        const currentTotalCost = projectMembers.reduce((sum, member) => sum + member.cost, 0);
+        const currentTotalCost = currentProject.members?.reduce((sum, member) => sum + member.cost, 0) || 0;
         if (Number(memberForm.cost) > (currentProject.project_cost - currentTotalCost)) {
             toast.error("Member cost exceeds remaining project budget");
             return;
@@ -183,7 +163,7 @@ const ProjectDetailDashboard = () => {
         }
         
         // Check for duplicate member
-        if (projectMembers.some(member => member.member.id === memberForm.member_id)) {
+        if (currentProject.members?.some(member => member.member.id === memberForm.member_id)) {
             toast.error("This member is already added to the project");
             return;
         }
@@ -328,28 +308,6 @@ const ProjectDetailDashboard = () => {
                     </form>
                 </div>
                 
-                {/* Image Upload Form */}
-                <div className="rounded-lg shadow-md p-6 mb-8"
-                    style={{ backgroundColor: "var(--color-navy-dark)" }}
-                >
-                    <h2 className="text-2xl font-bold mb-4 text-white">Update Project Image</h2>
-                    <form onSubmit={handleImageUpload}>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => setImageFile(e.target.files[0])}
-                            className="mb-4 text-white"
-                        />
-                        <button
-                            type="submit"
-                            className="text-white px-4 py-2 rounded hover:opacity-90"
-                            style={{ backgroundColor: "var(--color-purple)" }}
-                        >
-                            Upload Image
-                        </button>
-                    </form>
-                </div>
-                
                 {/* Members Section */}
                 <div className="rounded-lg shadow-md p-6 mb-8"
                     style={{ backgroundColor: "var(--color-navy-dark)" }}
@@ -360,53 +318,62 @@ const ProjectDetailDashboard = () => {
                     <form onSubmit={handleMemberFormSubmit} className="mb-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block mb-2 text-white">Member</label>
-                                <input
-                                    type="text"
-                                    placeholder="Search member..."
+                                <label className="block mb-2 text-white">Member *</label>
+                                <select
+                                    name="member_id"
+                                    value={memberForm.member_id}
+                                    onChange={handleMemberFormChange}
                                     className="w-full p-2 border rounded bg-[--color-black-wash] text-white"
-                                />
+                                    required
+                                >
+                                    <option value="">Select a member</option>
+                                    {members.map((member) => (
+                                        <option key={member.id} value={member.id} className="text-black">
+                                            {member.first_name} {member.last_name}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
-                                <label className="block mb-2 text-white">Cost</label>
+                                <label className="block mb-2 text-white">Cost *</label>
                                 <input
                                     type="number"
                                     name="cost"
                                     value={memberForm.cost}
-                                    onChange={(e) => setMemberForm(prev => ({ ...prev, cost: e.target.value }))}
+                                    onChange={handleMemberFormChange}
                                     className="w-full p-2 border rounded bg-[--color-black-wash] text-white"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block mb-2 text-white">Cost Received</label>
+                                <label className="block mb-2 text-white">Cost Received *</label>
                                 <input
                                     type="number"
                                     name="cost_received"
                                     value={memberForm.cost_received}
-                                    onChange={(e) => setMemberForm(prev => ({ ...prev, cost_received: e.target.value }))}
+                                    onChange={handleMemberFormChange}
                                     className="w-full p-2 border rounded bg-[--color-black-wash] text-white"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block mb-2 text-white">Start Date</label>
+                                <label className="block mb-2 text-white">Start Date *</label>
                                 <input
                                     type="date"
                                     name="start_date"
                                     value={memberForm.start_date}
-                                    onChange={(e) => setMemberForm(prev => ({ ...prev, start_date: e.target.value }))}
+                                    onChange={handleMemberFormChange}
                                     className="w-full p-2 border rounded bg-[--color-black-wash] text-white"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block mb-2 text-white">End Date</label>
+                                <label className="block mb-2 text-white">End Date *</label>
                                 <input
                                     type="date"
                                     name="end_date"
                                     value={memberForm.end_date}
-                                    onChange={(e) => setMemberForm(prev => ({ ...prev, end_date: e.target.value }))}
+                                    onChange={handleMemberFormChange}
                                     className="w-full p-2 border rounded bg-[--color-black-wash] text-white"
                                     required
                                 />
@@ -423,7 +390,7 @@ const ProjectDetailDashboard = () => {
                     
                     {/* Members List */}
                     <div className="space-y-4">
-                        {projectMembers.map((member) => (
+                        {currentProject.members?.map((member) => (
                             <div key={member.id} className="border p-4 rounded bg-[--color-black-wash]">
                                 <div className="flex justify-between items-center">
                                     <div className="text-white">
@@ -474,7 +441,7 @@ const ProjectDetailDashboard = () => {
                     
                     {/* Details List */}
                     <div className="space-y-4">
-                        {currentProject.details.map((detail) => (
+                        {currentProject.details?.map((detail) => (
                             <div key={detail.id} className="border p-4 rounded bg-[--color-black-wash]">
                                 <div className="flex justify-between items-center">
                                     <p className="text-white">{detail.detail_description}</p>

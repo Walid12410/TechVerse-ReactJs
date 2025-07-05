@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Global black background */
+html, body {
+  background-color: #07060f;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  background-color: #07060f;
+  min-height: 100vh;
+}
 
 /* Global Color Variables */
 :root {
@@ -24,6 +35,8 @@
   --color-purple-black: #01001d;
   --color-purple: #9100F9;
   --color-black-wash: #0c0c0c;
+
+  --color-animation-background: #07060f;
 }
 
 @font-face {
@@ -105,3 +118,41 @@
     0 0 20px var(--color-purple),
     0 0 20px var(--color-purple);
 }
+
+.glow-text-animated {
+  color: var(--color-purple);
+  text-shadow: 
+    0 0 5px var(--color-purple),
+    0 0 10px var(--color-purple),
+    0 0 15px var(--color-purple),
+    0 0 20px var(--color-purple),
+    0 0 25px var(--color-purple),
+    0 0 30px var(--color-purple);
+  animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  0% {
+    text-shadow: 
+      0 0 5px var(--color-purple),
+      0 0 10px var(--color-purple),
+      0 0 15px var(--color-purple),
+      0 0 20px var(--color-purple),
+      0 0 25px var(--color-purple),
+      0 0 30px var(--color-purple);
+  }
+  100% {
+    text-shadow: 
+      0 0 10px var(--color-purple),
+      0 0 20px var(--color-purple),
+      0 0 30px var(--color-purple),
+      0 0 40px var(--color-purple),
+      0 0 50px var(--color-purple),
+      0 0 60px var(--color-purple);
+  }
+}
+
+
+
+
+

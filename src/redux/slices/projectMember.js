@@ -5,7 +5,7 @@ export const getProjectMember = createAsyncThunk(
     "projectMember/getProjectMember",
     async ({id}, { rejectWithValue }) => {
         try {
-            const response = await request.get(`/modular/project-member/get-by-project.php?id${id}`);
+            const response = await request.get(`/modular/project-members/get-by-project.php?id=${id}`);
             return response.data;
         } catch (error) {
             return rejectWithValue((error.response?.data?.error || "Error fetch data"));
@@ -17,7 +17,7 @@ export const createProjectMember = createAsyncThunk(
     "projectMember/createProjectMember",
     async ({data}, { rejectWithValue }) => {
         try {
-            const response = await request.post(`/modular/project-member/create.php`, data,{
+            const response = await request.post(`/modular/project-members/create.php`, data,{
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -33,7 +33,7 @@ export const updateProjectMember = createAsyncThunk(
     "projectMember/updateProjectMember",
     async ({id, data}, { rejectWithValue }) => {
         try {
-            const response = await request.put(`/modular/project-member/update.php?id=${id}`, data,{
+            const response = await request.put(`/modular/project-members/update.php?id=${id}`, data,{
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -49,7 +49,7 @@ export const deleteProjectMember = createAsyncThunk(
     "projectMember/deleteProjectMember",
     async ({id}, { rejectWithValue }) => {
         try {
-            const response = await request.delete(`/modular/project-member/delete.php?id=${id}`);
+            const response = await request.delete(`/modular/project-members/delete.php?id=${id}`);
             return response.data;
         }catch (error) {
             return rejectWithValue((error.response?.data?.error || "Error delete data"));

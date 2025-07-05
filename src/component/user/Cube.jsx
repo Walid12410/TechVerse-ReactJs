@@ -180,9 +180,16 @@ const CubeShowcase = () => {
             whileTap={{ scale: 0.98 }}
           >
             <a
-              href='#home'
               style={{ fontFamily: "CelabRegular, sans-serif" }}
-              className="bg-transparent text-white px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base cursor-pointer">
+              className="bg-transparent text-white px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base cursor-pointer"
+              onClick={() => {
+                const targetId = "home".replace("#", "");
+                const el = document.getElementById(targetId);
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              >
               click to discover
             </a>
           </motion.div>

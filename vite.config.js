@@ -10,7 +10,7 @@ export default defineConfig({
       '/api': {
         target: 'https://techverseagency.com/api',
         changeOrigin: true,
-        secure: false,
+        secure: true,
       },
     },
   },

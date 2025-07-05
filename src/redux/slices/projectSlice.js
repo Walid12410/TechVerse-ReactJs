@@ -47,7 +47,11 @@ export const updateProject = createAsyncThunk(
     "project/updateProject",
     async ({id, data }, { rejectWithValue }) => {
         try {
-            const response = await request.put(`/modular/project/update.php?id=${id}`, data);
+            const response = await request.put(`/modular/project/update.php?id=${id}`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             return response.data;
         } catch (error) {
             return rejectWithValue((error.response?.data?.error || "Error update data"));
@@ -94,8 +98,6 @@ export const deleteProjectDetail = createAsyncThunk(
         }
     }
 );
-
-
 
 const projectSlice = createSlice({
     name: "project",

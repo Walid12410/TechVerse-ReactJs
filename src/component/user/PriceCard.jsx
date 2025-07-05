@@ -28,8 +28,20 @@ const PriceCard = ({ price, index }) => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                     transition={{ delay: 0.3 * index + 0.2 }}
-                    className="text-3xl font-bold " // glow-text
-                    style={{ fontFamily: "CelabRegular, sans-serif", color: "var(--color-purple)" }}
+                    className="text-3xl font-bold glow-text-animated"
+                    style={{ 
+                        fontFamily: "CelabRegular, sans-serif", 
+                        color: "var(--color-purple)",
+                        textShadow: `
+                            0 0 5px var(--color-purple),
+                            0 0 10px var(--color-purple),
+                            0 0 15px var(--color-purple),
+                            0 0 20px var(--color-purple),
+                            0 0 25px var(--color-purple),
+                            0 0 30px var(--color-purple)
+                        `,
+                        animation: "glowPulse 2s ease-in-out infinite alternate"
+                    }}
                 >
                     {price?.plan_title}
                 </motion.h3>

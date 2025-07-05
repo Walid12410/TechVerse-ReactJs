@@ -105,8 +105,7 @@ const ContactPage = () => {
     }
 
     return (
-        <div className="min-h-screen relative">
-            <AnimatedBackground />
+        <div className="min-h-screen" style={{ backgroundColor: 'var(--color-animation-background)' }}>
             <div className="relative z-10 pt-20 px-4 sm:px-8 md:px-16 mb-20">
                 {/* Header */}
                 <div className="max-w-6xl mx-auto flex items-center justify-between mb-12">
